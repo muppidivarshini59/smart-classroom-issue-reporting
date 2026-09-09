@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Complaint Submitted Successfully! ✅</h1>
+
+    <p>Your complaint has been registered.</p>
+
+    <h2>Complaint ID: {{ complaint["complaint_id"] }}</h2>
+
+    <p><strong>Name:</strong> {{ complaint["name"] }}</p>
+    <p><strong>Classroom:</strong> {{ complaint["classroom"] }}</p>
+    <p><strong>Category:</strong> {{ complaint["category"] }}</p>
+    <p><strong>Status:</strong> {{ complaint["status"] }}</p>
+    <p><strong>Description:</strong> {{ complaint["description"] }}</p>
+
+    <br>
+
+    <a href="{{ url_for('report_form') }}">Report Another Issue</a>
+</div>
+{% endblock %}
