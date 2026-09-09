@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Complaint Submitted{% endblock %}
+
+{% block body %}
+<header class="site-header">
+  <div class="brand-icon">🏫</div>
+  <h1>Smart Classroom Issue Reporting</h1>
+  <p>Sri Vasavi Engineering College</p>
+</header>
+
+<div class="page-wrap">
+  <div class="card">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Complaint Submitted Successfully</div>
+    <div class="success-sub">Thank you, {{ complaint["name"] }}. Your report has been recorded.</div>
+
+    <div class="complaint-id-box">
+      <div class="label">Your Complaint ID</div>
+      <div class="value">{{ complaint["complaint_id"] }}</div>
+    </div>
+
+    <ul class="summary-list">
+      <li><span class="k">Status</span><span class="v"><span class="badge badge-pending">{{ complaint["status"] }}</span></span></li>
+      <li><span class="k">Classroom</span><span class="v">{{ complaint["classroom"] }}</span></li>
+      <li><span class="k">Category</span><span class="v">{{ complaint["category"] }}</span></li>
+      <li><span class="k">Submitted On</span><span class="v">{{ complaint["created_at"] }}</span></li>
+    </ul>
+
+    <a class="btn btn-secondary" href="{{ url_for('report_form', room=complaint['classroom']) }}">Submit Another Report</a>
+  </div>
+
+  <footer class="site-footer">
+    Please note your Complaint ID for future reference.
+  </footer>
+</div>
+{% endblock %}

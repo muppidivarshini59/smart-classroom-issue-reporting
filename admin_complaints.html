@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}All Complaints - Admin View{% endblock %}
+
+{% block body %}
+<div class="page-wrap wide">
+  <div class="top-nav" style="margin-top:24px">
+    <h1 class="page-title">📋 All Complaints ({{ complaints|length }})</h1>
+    <div class="links">
+      <a href="{{ url_for('report_form') }}">+ New Report</a>
+      <a href="{{ url_for('admin_settings') }}">Contact Settings</a>
+    </div>
+  </div>
+
+  <div class="card">
+    {% if complaints|length == 0 %}
+      <div class="empty-state">
+        No complaints submitted yet. Scan a room QR code (or open <code>/report?room=101</code>) to create one.
+      </div>
+    {% else %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Photo</th>
+              <th>Student</th>
+              <th>Branch/Year/Sec</th>
+              <th>Room</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Submitted</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in complaints %}
+            <tr>
+              <td><strong>{{ c["complaint_id"] }}</strong></td>
+              <td>
+                {% if c["photo_filename"] %}
+                  <img class="photo-thumb" src="{{ url_for('static', filename='uploads/' + c['photo_filename']) }}" alt="photo">
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td>{{ c["name"] }}<br><span style="color:#98a2b3">{{ c["student_id"] }}</span></td>
+              <td>{{ c["branch"] }} / {{ c["year"] }} / {{ c["section"] }}</td>
+              <td>{{ c["classroom"] }}</td>
+              <td>{{ c["category"] }}</td>
+              <td style="white-space:normal;max-width:220px">{{ c["description"] }}</td>
+              <td>{{ c["created_at"] }}</td>
+              <td>
+                <form action="{{ url_for('update_status', complaint_id=c['complaint_id']) }}" method="POST">
+                  <select name="status" class="status-select" onchange="this.form.submit()">
+                    {% for s in status_options %}
+                      <option value="{{ s }}" {% if c["status"] == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                  </select>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+
+  <footer class="site-footer">
+    This is a simple demo admin view (no login yet) — see the README for notes on securing it later.
+  </footer>
+</div>
+{% endblock %}

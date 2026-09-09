@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Report a Classroom Issue{% endblock %}
+
+{% block body %}
+<header class="site-header">
+  <div class="brand-icon">🏫</div>
+  <h1>Smart Classroom Issue Reporting</h1>
+  <p>Sri Vasavi Engineering College</p>
+  {% if classroom %}
+    <div class="room-chip">📍 Classroom {{ classroom }}</div>
+  {% endif %}
+</header>
+
+<div class="page-wrap">
+  <div class="card">
+
+    {% if not classroom %}
+      <div class="helper-note">
+        No classroom number was found in the link. You can still type it in manually below —
+        normally this page is opened by scanning the QR code fixed in a classroom.
+      </div>
+    {% endif %}
+
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('submit_complaint') }}" method="POST" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="name">Full Name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" required
+               value="{{ form_data.name if form_data else '' }}" placeholder="e.g. M. Varshini">
+      </div>
+
+      <div class="form-group">
+        <label for="student_id">Student ID / Roll Number <span class="req">*</span></label>
+        <input type="text" id="student_id" name="student_id" required
+               value="{{ form_data.student_id if form_data else '' }}" placeholder="e.g. 23A91A0501">
+      </div>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label for="branch">Branch <span class="req">*</span></label>
+          <input type="text" id="branch" name="branch" required
+                 value="{{ form_data.branch if form_data else '' }}" placeholder="e.g. CST">
+        </div>
+        <div class="form-group">
+          <label for="year">Year <span class="req">*</span></label>
+          <select id="year" name="year" required>
+            <option value="">Select</option>
+            {% for y in ["1st Year", "2nd Year", "3rd Year", "4th Year"] %}
+              <option value="{{ y }}" {% if form_data and form_data.year == y %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="form-group">
+          <label for="section">Section <span class="req">*</span></label>
+          <input type="text" id="section" name="section" required
+                 value="{{ form_data.section if form_data else '' }}" placeholder="e.g. A">
+        </div>
+        <div class="form-group">
+          <label for="classroom">Classroom Number <span class="req">*</span></label>
+          <input type="text" id="classroom" name="classroom" required
+                 value="{{ classroom }}" placeholder="e.g. 101"
+                 {% if classroom %}class="readonly-field" readonly{% endif %}>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Issue Category <span class="req">*</span></label>
+        <select id="category" name="category" required>
+          <option value="">Select an issue type</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if form_data and form_data.category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Problem Description <span class="req">*</span></label>
+        <textarea id="description" name="description" required
+                  placeholder="Describe the problem in a few sentences...">{{ form_data.description if form_data else '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Photo of the Problem (optional)</label>
+        <div class="file-input-wrap" onclick="document.getElementById('photo').click()">
+          <span id="file-label">📷 Tap to take or choose a photo</span>
+          <input type="file" id="photo" name="photo" accept="image/*" capture="environment"
+                 style="display:none" onchange="previewPhoto(this)">
+        </div>
+        <div class="file-hint">Accepted formats: JPG, PNG, GIF, WEBP — max 8 MB.</div>
+        <img id="photo-preview" alt="Selected photo preview">
+      </div>
+
+      <button type="submit" class="btn">Submit Complaint</button>
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    Complaint IDs are generated automatically. You'll be able to note yours down after submitting.
+  </footer>
+</div>
+
+<script>
+  function previewPhoto(input) {
+    const preview = document.getElementById('photo-preview');
+    const label = document.getElementById('file-label');
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(input.files[0]);
+      label.textContent = '✅ ' + input.files[0].name;
+    }
+  }
+</script>
+{% endblock %}
