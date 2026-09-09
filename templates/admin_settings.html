@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Contact Settings - Admin{% endblock %}
+
+{% block body %}
+<div class="page-wrap">
+  <div class="top-nav" style="margin-top:24px">
+    <h1 class="page-title">⚙️ Contact Settings</h1>
+    <div class="links">
+      <a href="{{ url_for('report_form') }}">+ New Report</a>
+      <a href="{{ url_for('admin_complaints') }}">All Complaints</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="helper-note">
+      These fields are intentionally empty. Fill them in whenever the college finalizes who should
+      receive complaints — no new QR code or student-page changes are needed when you do.
+    </div>
+
+    {% if saved %}
+      <div class="alert alert-success">Contact settings saved.</div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="form-group">
+        <label for="responsible_person">Responsible Person / Department</label>
+        <input type="text" id="responsible_person" name="responsible_person"
+               value="{{ settings.responsible_person }}" placeholder="e.g. Maintenance Department (leave blank for now)">
+      </div>
+
+      <div class="form-group">
+        <label for="contact_phone">Phone Number</label>
+        <input type="tel" id="contact_phone" name="contact_phone"
+               value="{{ settings.contact_phone }}" placeholder="Leave blank for now">
+      </div>
+
+      <div class="form-group">
+        <label for="contact_email">Email</label>
+        <input type="email" id="contact_email" name="contact_email"
+               value="{{ settings.contact_email }}" placeholder="Leave blank for now">
+      </div>
+
+      <button type="submit" class="btn">Save Settings</button>
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    These values aren't shown to students yet — they're stored for when you're ready to wire up notifications.
+  </footer>
+</div>
+{% endblock %}
