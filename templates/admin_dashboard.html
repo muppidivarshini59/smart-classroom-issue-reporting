@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        a {
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+        }
+
+        .logout {
+            background: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="number">{{ total }}</div>
+            <div>Total Complaints</div>
+        </div>
+
+        <div class="card">
+            <div class="number">{{ pending }}</div>
+            <div>Pending</div>
+        </div>
+
+        <div class="card">
+            <div class="number">{{ in_progress }}</div>
+            <div>In Progress</div>
+        </div>
+
+        <div class="card">
+            <div class="number">{{ resolved }}</div>
+            <div>Resolved</div>
+        </div>
+
+    </div>
+
+    <div class="actions">
+        <a href="{{ url_for('admin_complaints') }}">
+            View Complaints
+        </a>
+
+        <a href="{{ url_for('admin_logout') }}" class="logout">
+            Logout
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
