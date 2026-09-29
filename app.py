@@ -12,7 +12,7 @@ import os
 import sqlite3
 from datetime import datetime
 
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 from werkzeug.utils import secure_filename
 
 # ---------------------------------------------------------------------------
@@ -134,8 +134,7 @@ def generate_complaint_id():
 # ---------------------------------------------------------------------------
 @app.route("/")
 def home():
-    # Anyone hitting the bare site gets sent to the report form
-    return redirect(url_for("report_form"))
+    return render_template("index.html")
 
 
 @app.route("/report", methods=["GET"])
@@ -223,8 +222,39 @@ def success(complaint_id):
 
 
 # ---------------------------------------------------------------------------
-# Simple admin/demo routes (no login yet — see README for notes on this)
+# Admin login and admin routes
 # ---------------------------------------------------------------------------
+
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin123"
+
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session["admin_logged_in"] = True
+            return redirect(url_for("admin_complaints"))
+
+        return render_template(
+            "admin_login.html",
+            error="Invalid username or password."
+        )
+
+    return render_template("admin_login.html")
+
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin_logged_in", None)
+    return redirect(url_for("admin_login"))
+
+
+def admin_required():
+    return session.get("admin_logged_in") is True
 @app.route("/admin/complaints")
 def admin_complaints():
     conn = get_db()
