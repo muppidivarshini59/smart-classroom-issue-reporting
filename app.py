@@ -371,7 +371,47 @@ def success(complaint_id):
         complaint=complaint
     )
 
+# ---------------------------------------------------------------------------
+# Student complaint tracking
+# ---------------------------------------------------------------------------
 
+@app.route("/track", methods=["GET", "POST"])
+def track_complaint():
+    complaint = None
+    error = None
+
+    if request.method == "POST":
+        complaint_id = request.form.get("complaint_id", "").strip().upper()
+
+        if not complaint_id:
+            error = "Please enter your Complaint ID."
+        else:
+            conn = get_db()
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+            cursor.execute(
+                """
+                SELECT complaint_id, name, classroom, category,
+                       description, status, created_at
+                FROM complaints
+                WHERE complaint_id = %s
+                """,
+                (complaint_id,)
+            )
+
+            complaint = cursor.fetchone()
+
+            cursor.close()
+            conn.close()
+
+            if not complaint:
+                error = "Complaint ID not found."
+
+    return render_template(
+        "track.html",
+        complaint=complaint,
+        error=error
+    )
 # ---------------------------------------------------------------------------
 # Admin login and admin routes
 # ---------------------------------------------------------------------------

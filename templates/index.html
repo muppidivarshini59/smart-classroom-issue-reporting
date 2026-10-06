@@ -1,12 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Classroom Issue Reporting</title>
+
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -22,8 +24,15 @@
             padding: 30px 16px;
         }
 
-        header h1 { font-size: 23px; margin: 0 0 10px; }
-        header p { margin: 0; color: #d8e6fa; }
+        header h1 {
+            font-size: 23px;
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 0;
+            color: #d8e6fa;
+        }
 
         main {
             width: min(92%, 750px);
@@ -45,8 +54,15 @@
             box-shadow: 0 5px 18px #19375b12;
         }
 
-        .symbol { font-size: 44px; }
-        .card h2 { font-size: 21px; margin: 15px 0 10px; }
+        .symbol {
+            font-size: 44px;
+        }
+
+        .card h2 {
+            font-size: 21px;
+            margin: 15px 0 10px;
+        }
+
         .card p {
             color: #64748b;
             line-height: 1.6;
@@ -63,9 +79,17 @@
             margin-top: 18px;
         }
 
-        .student { background: #1d64c8; }
-        .admin { background: #21834d; }
-        .btn:hover { opacity: 0.88; }
+        .student {
+            background: #1d64c8;
+        }
+
+        .admin {
+            background: #21834d;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+        }
 
         footer {
             text-align: center;
@@ -75,43 +99,81 @@
         }
     </style>
 </head>
+
 <body>
+
     <header>
         <h1>SRI VASAVI ENGINEERING COLLEGE</h1>
         <p>Smart Classroom Issue Reporting System</p>
     </header>
 
     <main>
+
         <h2>Welcome!</h2>
         <p>Report classroom issues quickly and easily.</p>
 
         <div class="cards">
+
+            <!-- Student Report -->
             <section class="card">
                 <div class="symbol">📝</div>
+
                 <h2>Student Report</h2>
-                <p>Report cleanliness, broken desks, fan,
-                   light and other classroom problems.</p>
+
+                <p>
+                    Report cleanliness, broken desks, fan,
+                    light and other classroom problems.
+                </p>
+
                 <a class="btn student"
                    href="{{ url_for('report_form') }}">
                     Submit a Complaint
                 </a>
             </section>
 
+
+            <!-- Track Complaint -->
+            <section class="card">
+                <div class="symbol">🔍</div>
+
+                <h2>Track Complaint</h2>
+
+                <p>
+                    Enter your Complaint ID to check
+                    the current status of your complaint.
+                </p>
+
+                <a class="btn student"
+                   href="{{ url_for('track_complaint') }}">
+                    Track Status
+                </a>
+            </section>
+
+
+            <!-- Admin Login -->
             <section class="card">
                 <div class="symbol">🛡️</div>
+
                 <h2>Admin Login</h2>
-                <p>Authorized staff can view complaints
-                   and update their status.</p>
+
+                <p>
+                    Authorized staff can view complaints
+                    and update their status.
+                </p>
+
                 <a class="btn admin"
                    href="{{ url_for('admin_login') }}">
                     Admin Login
                 </a>
             </section>
+
         </div>
+
     </main>
 
     <footer>
         For classroom maintenance and infrastructure reporting
     </footer>
+
 </body>
 </html>
