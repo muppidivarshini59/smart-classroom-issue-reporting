@@ -1,4 +1,4 @@
-```html
+
 {% extends "base.html" %}
 
 {% block title %}Report a Classroom Issue{% endblock %}
@@ -7,126 +7,131 @@
 
 <header class="site-header">
 
-  <div class="brand-icon">🏫</div>
-  <h1>Smart Classroom Issue Reporting</h1>
-  <p>Sri Vasavi Engineering College</p>
+    <div class="brand-icon">🏫</div>
+    <h1>Smart Classroom Issue Reporting</h1>
+    <p>Sri Vasavi Engineering College</p>
 
-  {% if classroom %}
-    <div class="room-chip">📍 Classroom {{ classroom }}</div>
-  {% endif %}
+    {% if classroom %}
+        <div class="room-chip">📍 Classroom {{ classroom }}</div>
+    {% endif %}
 
 </header>
 
 <div class="page-wrap">
 
-  <div class="card">
+    <div class="card">
 
-    {% if not classroom %}
-      <div class="helper-note">
-        No classroom number was found in the link. You can still type it in manually below —
-        normally this page is opened by scanning the QR code fixed in a classroom.
-      </div>
-    {% endif %}
+        {% if not classroom %}
+            <div class="helper-note">
+                No classroom number was found in the link. You can still type it in manually below —
+                normally this page is opened by scanning the QR code fixed in a classroom.
+            </div>
+        {% endif %}
 
-    {% if error %}
-      <div class="alert alert-error">{{ error }}</div>
-    {% endif %}
+        {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
 
-    <form action="{{ url_for('submit_complaint') }}" method="POST">
+        <form action="{{ url_for('submit_complaint') }}"
+              method="POST"
+              autocomplete="off">
 
-      <div class="form-group">
-        <label for="name">Full Name <span class="req">*</span></label>
-        <input type="text" id="name" name="name" required
-               value="{{ form_data.name if form_data else '' }}"
-               placeholder="e.g. M. Varshini">
-      </div>
+            <div class="form-group">
+                <label for="name">Full Name <span class="req">*</span></label>
+                <input type="text" id="name" name="name" required
+                       value=""
+                       placeholder="e.g. M. Varshini">
+            </div>
 
-      <div class="form-group">
-        <label for="student_id">Student ID / Roll Number <span class="req">*</span></label>
-        <input type="text" id="student_id" name="student_id" required
-               value="{{ form_data.student_id if form_data else '' }}"
-               placeholder="e.g. 23A91A0501">
-      </div>
+            <div class="form-group">
+                <label for="student_id">Student ID / Roll Number <span class="req">*</span></label>
+                <input type="text" id="student_id" name="student_id" required
+                       value=""
+                       placeholder="e.g. 23A91A0501">
+            </div>
 
-      <div class="field-row">
+            <div class="field-row">
 
-        <div class="form-group">
-          <label for="branch">Branch <span class="req">*</span></label>
-          <input type="text" id="branch" name="branch" required
-                 value="{{ form_data.branch if form_data else '' }}"
-                 placeholder="e.g. CST">
-        </div>
+                <div class="form-group">
+                    <label for="branch">Branch <span class="req">*</span></label>
+                    <input type="text" id="branch" name="branch" required
+                           value=""
+                           placeholder="e.g. CST">
+                </div>
 
-        <div class="form-group">
-          <label for="year">Year <span class="req">*</span></label>
-          <select id="year" name="year" required>
-            <option value="">Select</option>
+                <div class="form-group">
+                    <label for="year">Year <span class="req">*</span></label>
+                    <select id="year" name="year" required>
+                        <option value="">Select</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                    </select>
+                </div>
 
-            {% for y in ["1st Year", "2nd Year", "3rd Year", "4th Year"] %}
-              <option value="{{ y }}"
-                {% if form_data and form_data.year == y %}selected{% endif %}>
-                {{ y }}
-              </option>
-            {% endfor %}
+            </div>
 
-          </select>
-        </div>
+            <div class="field-row">
 
-      </div>
+                <div class="form-group">
+                    <label for="section">Section <span class="req">*</span></label>
+                    <input type="text" id="section" name="section" required
+                           value=""
+                           placeholder="e.g. A">
+                </div>
 
-      <div class="field-row">
+                <div class="form-group">
+                    <label for="classroom">Classroom Number <span class="req">*</span></label>
+                    <input type="text" id="classroom" name="classroom" required
+                           value="{{ classroom }}"
+                           placeholder="e.g. 101"
+                           {% if classroom %}class="readonly-field" readonly{% endif %}>
+                </div>
 
-        <div class="form-group">
-          <label for="section">Section <span class="req">*</span></label>
-          <input type="text" id="section" name="section" required
-                 value="{{ form_data.section if form_data else '' }}"
-                 placeholder="e.g. A">
-        </div>
+            </div>
 
-        <div class="form-group">
-          <label for="classroom">Classroom Number <span class="req">*</span></label>
-          <input type="text" id="classroom" name="classroom" required
-                 value="{{ classroom }}"
-                 placeholder="e.g. 101"
-                 {% if classroom %}class="readonly-field" readonly{% endif %}>
-        </div>
+            <div class="form-group">
+                <label for="category">Issue Category <span class="req">*</span></label>
 
-      </div>
+                <select id="category" name="category" required>
+                    <option value="">Select an issue type</option>
 
-      <div class="form-group">
-        <label for="category">Issue Category <span class="req">*</span></label>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
 
-        <select id="category" name="category" required>
-          <option value="">Select an issue type</option>
+                </select>
+            </div>
 
-          {% for cat in categories %}
-            <option value="{{ cat }}"
-              {% if form_data and form_data.category == cat %}selected{% endif %}>
-              {{ cat }}
-            </option>
-          {% endfor %}
+            <div class="form-group">
+                <label for="description">Problem Description <span class="req">*</span></label>
 
-        </select>
-      </div>
+                <textarea id="description" name="description" required
+                          placeholder="Describe the problem in a few sentences..."></textarea>
+            </div>
 
-      <div class="form-group">
-        <label for="description">Problem Description <span class="req">*</span></label>
+            <button type="submit" class="btn">Submit Complaint</button>
 
-        <textarea id="description" name="description" required
-                  placeholder="Describe the problem in a few sentences...">{{ form_data.description if form_data else '' }}</textarea>
-      </div>
+        </form>
 
-      <button type="submit" class="btn">Submit Complaint</button>
+    </div>
 
-    </form>
-
-  </div>
-
-  <footer class="site-footer">
-    Complaint IDs are generated automatically. You'll be able to note yours down after submitting.
-  </footer>
+    <footer class="site-footer">
+        Complaint IDs are generated automatically. You'll be able to note yours down after submitting.
+    </footer>
 
 </div>
 
+<script>
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        const form = document.querySelector("form");
+        if (form) {
+            form.reset();
+        }
+    }
+});
+</script>
+
 {% endblock %}
-```
